@@ -1,7 +1,20 @@
-import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { auth, db } from '../firebase.js';
+// backend/page-folders/<your file>.js
+
+// ✅ Use the same Firebase version everywhere (10.12.0)
+import {
+  doc,
+  getDoc,
+  setDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+// ✅ Import the shared auth/db instance one folder up
+import { auth, db } from '../firebase.js';
+
+// ✅ Keep any of your local utility imports after that
 import { transformRecipeList } from '../recipelist.js';
+
 
 // Global variable for recipeList
 let recipeList = [];

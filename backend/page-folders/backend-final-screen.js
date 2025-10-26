@@ -1,7 +1,22 @@
-import { doc, getDoc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { auth, db } from '../firebase.js';
+// backend/page-folders/<this file>.js
+
+// ✅ Firestore functions (v10.12.0)
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ✅ Auth (v10.12.0)
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+// ✅ Shared auth/db instance from one folder up
+import { auth, db } from '../firebase.js';
+
+// ✅ Your local utilities
 import { formatForFirestore, revertFormattedCategoryList } from '../recipelist.js';
+
 
 let finalFinalList = JSON.parse(localStorage.getItem('finalFinalList')) || [];
 let ingredientCategoryList = [];
