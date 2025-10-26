@@ -501,11 +501,12 @@ function clearIngredients() {
 
 
 export function addIngredient(event, field) {
+  console.log('[addIngredient]', field, event.type, event.key);
   const ingredientInput = document.querySelector('.input-ingredient');
-  const quantityInput = document.querySelector('.input-quantity');
-  const unitInput = document.querySelector('.input-unit');
+  const quantityInput   = document.querySelector('.input-quantity');
+  const unitInput       = document.querySelector('.input-unit');
 
-  // If the event is "blur", we don't want to focus on the next input
+  // On blur, just try to add if all three are present.
   if (event.type === 'blur') {
     if (ingredientInput.value && quantityInput.value && unitInput.value) {
       processIngredientInput(ingredientInput, quantityInput, unitInput);
@@ -513,29 +514,51 @@ export function addIngredient(event, field) {
     return;
   }
 
-  // Prevent navigation on space only for 'quantity' and 'unit' fields
-  if (["Enter", "Tab"].includes(event.key) || ([" "].includes(event.key) && field !== 'ingredient')) {
-    event.preventDefault();
+  // Robust key detection
+  const isEnter = event.key === 'Enter';
+  const isTab   = event.key === 'Tab';
+  const isSpace = event.code === 'Space' || event.key === ' ' || event.key === 'Spacebar';
 
-    // If quantity is filled but unit is missing, move to unit input
-    if (field === 'quantity' && quantityInput.value && !unitInput.value) {
-      document.getElementById('id-unit').focus();
-      return;
-    }
+  // Only treat SPACE as navigation for quantity/unit (NOT for ingredient, so spaces can be typed)
+  const shouldHandle =
+    isEnter ||
+    isTab ||
+    (isSpace && field !== 'ingredient');
 
-    // If unit is filled but ingredient is missing, move to ingredient input
-    if (field === 'unit' && quantityInput.value && unitInputList.includes(unitInput.value) && !ingredientInput.value) {
-      document.getElementById('id-ingredient').focus();
-      return;
-    }
+  if (!shouldHandle) return;
 
-    // If all fields are filled, add the ingredient to the list
-    if (ingredientInput.value && quantityInput.value && unitInput.value) {
-      processIngredientInput(ingredientInput, quantityInput, unitInput);
-      document.getElementById('id-quantity').focus();
-    }
+  event.preventDefault();
+
+  // Normalize the live values for checks
+  const quantityVal = (quantityInput.value || '').trim();
+  const unitVal     = (unitInput.value || '').trim().toLowerCase();
+  const ingVal      = (ingredientInput.value || '').trim();
+
+  // If we have quantity but no unit yet, go to unit
+  if (field === 'quantity' && quantityVal && !unitVal) {
+    document.getElementById('id-unit').focus();
+    return;
+  }
+
+  // If unit is valid (in list) and ingredient still empty, go to ingredient
+  if (
+    field === 'unit' &&
+    quantityVal &&
+    unitVal &&
+    unitInputList.map(u => u.toLowerCase()).includes(unitVal) &&
+    !ingVal
+  ) {
+    document.getElementById('id-ingredient').focus();
+    return;
+  }
+
+  // If all fields filled, commit the ingredient, then jump back to quantity
+  if (ingVal && quantityVal && unitVal) {
+    processIngredientInput(ingredientInput, quantityInput, unitInput);
+    document.getElementById('id-quantity').focus();
   }
 }
+
 
 function processIngredientInput(ingredientInput, quantityInput, unitInput) {
   const ingredient = ingredientInput.value.trim().toLowerCase();

@@ -46,25 +46,27 @@ fields.forEach(({ id, fieldName }) => {
 
 document.getElementById('previewImageUpload').addEventListener('click', previewImage)
 
-document.addEventListener('DOMContentLoaded', () => {
-  ['keydown', 'blur'].forEach(eventType => {
-    const quantityElement = document.getElementById('id-quantity');
-    const unitElement = document.getElementById('id-unit');
-    const ingredientElement = document.getElementById('id-ingredient');
-  
-    if (quantityElement) {
-      quantityElement.addEventListener(eventType, (event) => addIngredient(event, 'quantity'));
-    }
-  
-    if (unitElement) {
-      unitElement.addEventListener(eventType, (event) => addIngredient(event, 'unit'));
-    }
-  
-    if (ingredientElement) {
-      ingredientElement.addEventListener(eventType, (event) => addIngredient(event, 'ingredient'));
-    }
-  });  
-});
+// scripts/add-recipe.js (replace your DOMContentLoaded block with this)
+function attachIngredientListeners() {
+  ['keydown', 'blur'].forEach((eventType) => {
+    const qEl = document.getElementById('id-quantity');
+    const uEl = document.getElementById('id-unit');
+    const iEl = document.getElementById('id-ingredient');
+
+    if (qEl) qEl.addEventListener(eventType, (e) => addIngredient(e, 'quantity'));
+    if (uEl) uEl.addEventListener(eventType, (e) => addIngredient(e, 'unit'));
+    if (iEl) iEl.addEventListener(eventType, (e) => addIngredient(e, 'ingredient'));
+  });
+  console.log('[attachIngredientListeners] attached');
+}
+
+// Run now if DOM is ready; otherwise wait.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', attachIngredientListeners);
+} else {
+  attachIngredientListeners();
+}
+
 
 
 
