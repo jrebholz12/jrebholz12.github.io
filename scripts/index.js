@@ -1,21 +1,19 @@
-// Imports
+//Imports needed functions
 import { toggleSettings } from "../backend/page-folders/backend-index.js";
 import { sortTabs } from "../backend/page-folders/global-js.js";
 import { updateLastName, getLastName, changeTheme, initiateTheme } from "../backend/docs.js";
-import { auth } from '../backend/firebase.js';
-
+import { auth, db } from '../backend/firebase.js';
 import {
   setPersistence,
   browserLocalPersistence,
-  onAuthStateChanged
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  onAuthStateChanged,
+  signOut
+} from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
 
-import {
-  doc, getDoc, setDoc
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const defaultUnitInputList = ['g','tsp', 'ea', 'can', 'bunch', 'tbs', 'quart', 'gallon', 'oz', 'clove', 'cup', 'loaf', 'slice', 'lb', 'pack', 'bunch', 'jar'];
+let defaultUnitInputList = ['g','tsp', 'ea', 'can', 'bunch', 'tbs', 'quart', 'gallon', 'oz', 'clove', 'cup', 'loaf', 'slice', 'lb', 'pack', 'bunch', 'jar'];
 let unitInputList = [];
+
 
 // Function to load units from Firestore or default to predefined list
 export async function loadUnitInputList() {
@@ -23,18 +21,24 @@ export async function loadUnitInputList() {
 
   if (user) {
     const userDocRef = doc(db, 'users', user.uid, 'data', 'unitList');
+    
     try {
       const docSnap = await getDoc(userDocRef);
+
       if (docSnap.exists()) {
+        // Get the saved units from Firestore
         unitInputList = docSnap.data().unitList || defaultUnitInputList;
       } else {
+        // Use the default list if no custom list is found
         unitInputList = defaultUnitInputList;
       }
     } catch (error) {
       console.error("Error fetching unit list from Firestore:", error);
+      // Fallback to default list in case of error
       unitInputList = defaultUnitInputList;
     }
   } else {
+    // No user is signed in, use default list
     unitInputList = defaultUnitInputList;
   }
 }
@@ -47,32 +51,34 @@ async function initializeApp() {
 
   // Wait for authentication state change
   onAuthStateChanged(auth, async (user) => {
-    const authLink = document.getElementById('authLink'); // ensure this exists in your DOM
     if (user) {
-      // Fetch user data (last name and theme) — pass the user!
-      await getLastName(user);
+
+      // Fetch user data (last name and theme)
+      await getLastName();
       await initiateTheme();
 
       // Update UI to reflect sign-in status
-      if (authLink) authLink.innerText = 'Sign Out';
+      authLink.innerText = 'Sign Out';
       document.getElementById('settingsContainer').classList.remove('display-off');
 
       // Load other DOM-related functions
       sortTabs('home', 'home');
+
     } else {
-      if (authLink) authLink.innerText = 'Sign In';
+      authLink.innerText = 'Sign In';
       document.getElementById('settingsContainer').classList.add('display-off');
 
-      // Initialize default theme / homepage for signed-out users
-      await initiateTheme();
+      // You can initialize the theme and other things for unauthenticated users here if needed
+      initiateTheme();
     }
   });
 }
 
 // Call this function after DOM is fully loaded
 document.addEventListener('DOMContentLoaded', async () => {
-  await initializeApp();
+  await initializeApp(); // Ensure the app initializes after the DOM is ready
 });
+
 
 // Event Listeners for settings
 document.getElementById('settingsImage').addEventListener('click', toggleSettings);
