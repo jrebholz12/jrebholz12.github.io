@@ -3,7 +3,6 @@ import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/f
 
 
 
-
 export function toggleSettings(){
   let box = document.getElementById('settingsBox')
   if(box.classList.contains('display-off')){
@@ -12,5 +11,4 @@ export function toggleSettings(){
     box.classList.add('display-off')
   }
   console.log(box.classList)
-  console.log(document.getElementById('settingsContainer').innerHTML)
-}
+  console.log(document.getElementById('settingsContainer').innerHTML)}
