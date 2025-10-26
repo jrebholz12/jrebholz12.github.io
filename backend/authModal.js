@@ -1,4 +1,4 @@
-import {  signOut } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+import {  signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { auth, db } from '../backend/firebase.js';
 import { initiateTheme } from "../backend/docs.js";
 

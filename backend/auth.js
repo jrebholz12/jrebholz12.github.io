@@ -6,9 +6,9 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-} from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getLastName, initiateTheme } from './docs.js';
-import { sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+import { sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 // Add event listener for the "Forgot Password" link
 document.getElementById('forgotPasswordLink').addEventListener('click', (event) => {

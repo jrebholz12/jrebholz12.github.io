@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
+import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { auth, db } from './firebase.js'; // Ensure you are importing the auth and Firestore instances
 
 export async function getRecipeList() {
