@@ -365,6 +365,115 @@ padding: 0px 8px;
 }
 
 
+/* Make the button a positioning context */
+#filterButton.sort-and-filter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Little arrow flourish (optional) */
+#filterButton .arrow {
+  transition: transform .15s ease;
+}
+#filterButton:hover .arrow {
+  transform: rotate(180deg);
+}
+
+/* The dropdown panel (hidden by default) */
+#filterButton .filter-main {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;                /* hidden until hover */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 220px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+  z-index: 5000;                /* above recipe tiles/buttons */
+}
+
+/* Show the panel on hover of the whole button area */
+#filterButton:hover .filter-main {
+  display: block;
+}
+
+/* Items inside the dropdown */
+.filter-category {
+  padding: 6px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.filter-category:hover {
+  background: #f4f4f4;
+}
+
+/* "Cuisine >" row */
+.cuisine-category {
+  position: relative;           /* anchor for its submenu */
+  padding-right: 18px;          /* room for > */
+}
+
+/* The cuisine submenu container (hidden by default) */
+.cuisine-absolute {
+  position: absolute;
+  top: 0;
+  left: 50%; /* closer to the main panel */
+  transform: translateX(-10px); /* slight nudge back toward the menu */
+  display: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 220px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+  z-index: 5001;
+}
+
+.cuisine-absolute:empty {
+  display: none;
+}
+
+
+
+/* Show submenu when hovering the Cuisine row OR the submenu itself */
+.cuisine-category:hover .cuisine-absolute,
+.cuisine-absolute:hover {
+  display: block;
+}
+
+/* Grid of cuisines (tweak as you like) */
+.cuisine-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
+  gap: 2px;
+  max-height: 300px;
+  overflow: auto;
+}
+.cuisine-container .cuisine-list {
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.cuisine-container .cuisine-list:hover {
+  background: #f4f4f4;
+  cursor: pointer;
+}
+
+/* Optional: on small screens, keep it simple */
+@media (max-width: 600px) {
+  #filterButton .filter-main,
+  .cuisine-absolute {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 12px;
+  }
+}
 
 
 
