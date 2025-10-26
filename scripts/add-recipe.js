@@ -3,7 +3,7 @@ import { saveRecipe, printRecipe, deleteRecipe, addIngredient, populateRecipeBox
 import { getLastName } from '../backend/docs.js';
 import { sortTabs } from "../backend/page-folders/global-js.js"
 import { auth } from '../backend/firebase.js'
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js'
 
 
 //On Start-up

@@ -1,14 +1,7 @@
-// backend/page-folders/browse-recipes.js
-import { auth, db } from '../firebase.js'; // shared instance; includes persistence already
-
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
+import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
+import { auth, db } from '../firebase.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
 import { transformRecipeList } from '../recipelist.js';
-
-// (optional sanity)
-console.log('[browse-recipes] db ok?', !!db && typeof db === 'object');
-
 
 // Global variable for recipeList
 let recipeList = [];
