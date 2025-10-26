@@ -1,21 +1,25 @@
-// backend-add-recipe.js  — FIXED IMPORTS
-import { auth, db } from '../backend/firebase.js';  // ← correct relative path
+// backend/page-folders/backend-add-recipe.js
 
-import {
-  onAuthStateChanged
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+// ✅ Correct path: one level up to /backend/firebase.js
+import { auth, db } from '../firebase.js';
 
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   doc, getDoc, updateDoc, arrayRemove, setDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // (optional sanity check)
-console.log('db ok?', !!db && typeof db === 'object');
-
+console.log('[add-recipe] db ok?', !!db && typeof db === 'object');
 
 // Global variable for recipeList
 let recipeList = [];
-let unitInputList = ['g','tsp', 'ea', 'can', 'bunch', 'tbs', 'quart', 'gallon', 'oz', 'clove', 'cup', 'loaf', 'slice', 'lb', 'pack', 'bunch', 'jar'];
+
+// ✅ Define defaultUnitInputList here (you use it below)
+const defaultUnitInputList = [
+  'g','tsp','ea','can','bunch','tbs','quart','gallon','oz','clove','cup','loaf','slice','lb','pack','bunch','jar'
+];
+let unitInputList = [...defaultUnitInputList];
+
 
 
 // Function to get the recipe list from Firestore or initialize it if it doesn't exist
