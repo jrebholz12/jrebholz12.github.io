@@ -1,7 +1,20 @@
-import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
-import { auth, db } from '../firebase.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+// backend-add-recipe.js  — FIXED IMPORTS
+import { auth, db } from '../firebase.js';  // ← correct relative path
+
+import {
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+import {
+  doc, getDoc, updateDoc, arrayRemove, setDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// (optional sanity check)
+console.log('db ok?', !!db && typeof db === 'object');
 import { transformRecipeList } from '../recipelist.js';
+
+import { getLastName } from '../docs.js';
+import { sortTabs } from './global-js.js';
 
 // Global variable for recipeList
 let recipeList = [];
@@ -54,8 +67,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-
-
 // Global Variables for browsing a recipe
 let shoppingRecipeList = []
 let searchList = []
@@ -68,6 +79,12 @@ let finalQuantityList = []
 let finalUnitList = []
 let finalFinalList = JSON.parse(localStorage.getItem('finalFinalList')) || []
 let shoppingHTML = ''
+
+//Start Functions
+sortTabs('cookBook', 'cookbook')
+getLastName()
+sortRandom()
+importCuisines()
 
 
 //Export Functions
@@ -871,3 +888,38 @@ export function toTitleCase(str) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
+
+//Event Listeners
+document.getElementById('AZSort').addEventListener('click', sortAZ)
+document.getElementById('OldNewSort').addEventListener('click', sortOldToNew)
+document.getElementById('NewOldSort').addEventListener('click', sortNewToOld)
+document.getElementById('randomSort').addEventListener('click', sortRandom)
+
+document.getElementById('search-bar-input').addEventListener('keydown', (event)=>ingredientSearch(event))
+document.getElementById('exitButton').addEventListener('click', hidePreview)
+
+//document.getElementById('getIngredients').addEventListener('clic', clearPageFromLocalStorage)
+document.getElementById('getIngredients').addEventListener('click', populateRecipeShoppingList)
+
+document.addEventListener('DOMContentLoaded', () => {
+  const filterButton = document.getElementById('filterButton');
+  const filterMain = document.querySelector('.filter-main');
+
+  // Toggle visibility on click
+  filterButton.addEventListener('click', () => {
+    filterMain.classList.toggle('visible');
+  });
+
+  // Show on hover
+  filterButton.addEventListener('mouseover', () => {
+    filterMain.classList.add('visible');
+  });
+
+  // Hide on mouseout if not clicked
+  filterButton.addEventListener('mouseout', () => {
+    if (!filterMain.classList.contains('clicked')) {
+      filterMain.classList.remove('visible');
+    }
+  });
+});
+

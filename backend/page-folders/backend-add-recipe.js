@@ -1,6 +1,16 @@
-import { doc, getDoc, updateDoc, arrayRemove, setDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
-import { auth, db } from '../firebase.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+// backend-add-recipe.js  — FIXED IMPORTS
+import { auth, db } from '../firebase.js';  // ← correct relative path
+
+import {
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+import {
+  doc, getDoc, updateDoc, arrayRemove, setDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// (optional sanity check)
+console.log('db ok?', !!db && typeof db === 'object');
 
 
 // Global variable for recipeList

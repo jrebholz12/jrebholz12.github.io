@@ -1,7 +1,10 @@
 // firebase.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  initializeFirestore,
+  enableIndexedDbPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,7 +20,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and Firestore
+// Auth
 export const auth = getAuth(app);
-export const db = getFirestore(app);
 
+// Firestore with resilient networking
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true, // friendlier to github.io / strict networks
+  useFetchStreams: false              // reduces some proxy issues
+});
+
+// Offline cache (works in one tab at a time)
+enableIndexedDbPersistence(db).catch(err => {
+  if (err.code === 'failed-precondition') {
+    console.warn('IndexedDB persistence requires a single open tab of the app.');
+  } else if (err.code === 'unimplemented') {
+    console.warn('IndexedDB not available in this browser (private mode / old WebView).');
+  }
+});

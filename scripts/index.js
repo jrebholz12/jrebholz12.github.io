@@ -8,7 +8,7 @@ import {
   browserLocalPersistence,
   onAuthStateChanged,
   signOut
-} from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js';
 
 let defaultUnitInputList = ['g','tsp', 'ea', 'can', 'bunch', 'tbs', 'quart', 'gallon', 'oz', 'clove', 'cup', 'loaf', 'slice', 'lb', 'pack', 'bunch', 'jar'];
