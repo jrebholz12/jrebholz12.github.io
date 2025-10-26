@@ -52,6 +52,7 @@ async function initializeApp() {
       if (authLink) authLink.innerText = 'Sign In';
       document.getElementById('settingsContainer')?.classList.add('display-off');
       initiateTheme();
+      sortTabs('home', 'home')
     }
   });
 }
